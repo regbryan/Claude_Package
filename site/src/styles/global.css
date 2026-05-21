@@ -1,0 +1,310 @@
+@import "tailwindcss";
+
+/* HashiCorp DESIGN.md tokens. Black canvas + per-product accent identity. */
+@theme {
+  /* Surfaces — pure neutrals tinted toward cool brand hue per impeccable rules */
+  --color-canvas: #08090B;        /* was #000000 — tinted cool */
+  --color-surface-1: #15181e;
+  --color-surface-2: #1f232b;
+  --color-surface-3: #3b3d45;
+  --color-hairline: #3b3d45;
+  --color-hairline-soft: #252830;
+  --color-inverse: #F4F5F7;        /* was #ffffff — tinted cool */
+
+  /* Ink */
+  --color-ink: #F4F5F7;            /* was #ffffff */
+  --color-ink-muted: #b2b6bd;
+  --color-ink-subtle: #656a76;
+
+  /* Link */
+  --color-link: #2b89ff;
+  --color-visited: #a737ff;
+
+  /* Per-layer product accents (HashiCorp signature) */
+  --color-vault: #ffcf25;
+  --color-vagrant: #1868f2;
+  --color-terraform: #7b42bc;
+  --color-terraform-bright: #911ced;
+  --color-waypoint: #14c6cb;
+  --color-waypoint-deep: #12b6bb;
+  --color-nomad: #00ca8e;
+  --color-boundary: #f24c53;
+  --color-consul: #e62b1e;
+
+  /* Semantic */
+  --color-success: #00ca8e;
+  --color-warning: #ffcf25;
+  --color-error: #e62b1e;
+
+  /* Single family. Overpass: Highway-Gothic origin, RedHat pedigree, NOT in AI-default list. */
+  --font-sans: "Overpass", system-ui, sans-serif;
+}
+
+html {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "kern", "liga", "tnum";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Accessibility */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--color-vault);
+  color: var(--color-canvas);
+  padding: 12px 18px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  z-index: 9999;
+}
+.skip-link:focus {
+  left: 12px;
+  top: 12px;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-vault);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+body {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Display scale per DESIGN.md */
+.display-xl {
+  font-size: clamp(40px, 7.2vw, 80px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.031em; /* -2.5px @ 80px */
+}
+.display-lg {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.029em;
+}
+.display-md {
+  font-size: clamp(28px, 3.6vw, 40px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.headline {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.21;
+  letter-spacing: -0.021em;
+}
+.card-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.018em;
+}
+.subhead {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.body-lg {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.69;
+}
+.body-base {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.body-sm {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.71;
+}
+.caption {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.38;
+  letter-spacing: 0.015em;
+}
+
+/* Eyebrow — the signature section marker */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.23;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Buttons — WCAG 2.5.5 minimum 44px tap target */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  background: var(--color-inverse);
+  color: var(--color-canvas);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.29;
+  padding: 12px 18px;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+.btn-primary:hover { background: #e9ebef; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  background: var(--color-surface-2);
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.29;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: 1px solid rgba(178, 182, 189, 0.1);
+  transition: background 0.15s ease;
+}
+.btn-secondary:hover { background: var(--color-surface-3); }
+
+/* Cards */
+.card {
+  background: var(--color-surface-1);
+  border: 1px solid rgba(178, 182, 189, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.card:hover {
+  background: var(--color-surface-2);
+  border-color: var(--color-hairline);
+}
+
+.card-tight {
+  background: var(--color-surface-1);
+  border: 1px solid rgba(178, 182, 189, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Layer-tinted card (identity surface, not modal lift) */
+.card-product {
+  border-radius: 12px;
+  padding: 24px;
+  color: var(--color-ink);
+}
+
+/* Product pill — small chip above headlines */
+.product-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface-1);
+  color: var(--color-ink-muted);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(178, 182, 189, 0.08);
+}
+
+/* Two-column running-list row — replaces uniform card grids */
+.run-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(178, 182, 189, 0.1);
+  align-items: baseline;
+}
+@media (min-width: 768px) {
+  .run-row { grid-template-columns: 0.35fr 0.65fr; gap: 40px; }
+}
+.run-row:last-child { border-bottom: 0; }
+
+/* Hanging numeral for editorial excerpts */
+.hang-num {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-ink-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hairline rules */
+.hairline {
+  height: 1px;
+  background: rgba(178, 182, 189, 0.1);
+  width: 100%;
+}
+.hairline-soft {
+  height: 1px;
+  background: var(--color-hairline-soft);
+  width: 100%;
+}
+
+/* Inline links (DESIGN.md spec: accent-blue) */
+a.link, .prose a {
+  color: var(--color-link);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(43, 137, 255, 0.4);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+a.link:hover, .prose a:hover {
+  border-bottom-color: var(--color-link);
+}
+a.link:visited, .prose a:visited {
+  color: var(--color-visited);
+}
+
+/* CTA banner */
+.cta-banner {
+  background: var(--color-surface-1);
+  border: 1px solid rgba(178, 182, 189, 0.1);
+  border-radius: 24px;
+  padding: 48px;
+}
+
+/* Product-tinted accent for layer identity */
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-link);
+  color: var(--color-ink);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-canvas); }
+::-webkit-scrollbar-thumb { background: var(--color-surface-3); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-subtle); }
+
+/* Reveal */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }

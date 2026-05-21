@@ -1,0 +1,246 @@
+@import "tailwindcss";
+
+/* Ferrari DESIGN.md tokens. Near-black + Rosso Corsa red, cinematic editorial pacing. */
+@theme {
+  --color-canvas: #181614;          /* slight warm tint */
+  --color-canvas-elevated: #2E2C2A;
+  --color-surface-card: #2E2C2A;
+  --color-canvas-light: #FAF7F2;    /* warm off-white */
+
+  --color-ink: #FAF7F2;             /* was #ffffff — warm tinted */
+  --color-body: #969696;
+  --color-body-strong: #ffffff;
+  --color-muted: #666666;
+  --color-muted-soft: #8f8f8f;
+
+  --color-hairline: #303030;
+  --color-hairline-light: #d2d2d2;
+  --color-hairline-soft: #ebebeb;
+
+  --color-rosso: #da291c;
+  --color-rosso-active: #b01e0a;
+  --color-rosso-hover: #9d2211;
+
+  /* Onest: variable geometric grotesque, modest weight character, NOT in AI-default list */
+  --font-sans: "Onest", system-ui, sans-serif;
+}
+
+html {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "kern", "liga", "tnum";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Accessibility */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--color-rosso);
+  color: var(--color-ink);
+  padding: 14px 24px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  z-index: 9999;
+}
+.skip-link:focus { left: 12px; top: 12px; }
+*:focus-visible {
+  outline: 2px solid var(--color-rosso);
+  outline-offset: 3px;
+}
+
+/* Run-row */
+.run-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-hairline);
+  align-items: baseline;
+}
+@media (min-width: 768px) {
+  .run-row { grid-template-columns: 0.32fr 0.68fr; gap: 48px; }
+}
+.run-row:last-child { border-bottom: 0; }
+
+/* Hanging numeral */
+.hang-num {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-rosso);
+  font-variant-numeric: tabular-nums;
+}
+
+body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-body);
+}
+
+/* Display scale per DESIGN.md — modest weight 500, never bombastic */
+.display-mega {
+  font-size: clamp(48px, 8.5vw, 88px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.display-xl {
+  font-size: clamp(38px, 5.6vw, 56px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.display-lg {
+  font-size: clamp(28px, 3.4vw, 36px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+.display-md {
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.0075em;
+  color: var(--color-ink);
+}
+.title-md   { font-size: 18px; font-weight: 700; line-height: 1.2; color: var(--color-ink); }
+.title-sm   { font-size: 16px; font-weight: 500; line-height: 1.4; letter-spacing: 0.005em; color: var(--color-ink); }
+.body-md    { font-size: 14px; font-weight: 400; line-height: 1.5; color: var(--color-body); }
+.body-sm    { font-size: 13px; font-weight: 400; line-height: 1.5; color: var(--color-body); }
+.caption    { font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--color-muted); }
+
+/* Caption uppercase — Ferrari's signature label voice */
+.caption-uppercase {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.number-display {
+  font-size: clamp(48px, 7vw, 80px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+/* Buttons — Ferrari sharp uppercase CTAs. 48px height meets WCAG 2.5.5. */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  background: var(--color-rosso);
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 0;
+  transition: background 0.15s ease;
+}
+.btn-primary:hover { background: var(--color-rosso-hover); }
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 0;
+  border: 1px solid var(--color-ink);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.btn-outline:hover { background: var(--color-ink); color: var(--color-canvas); }
+
+/* Cards — Ferrari uses elevated #303030 cards with 0–8px corners */
+.card {
+  background: var(--color-canvas-elevated);
+  border-radius: 8px;
+  padding: 32px;
+  transition: background 0.2s ease;
+}
+.card:hover { background: #3a3a3a; }
+
+.card-tight {
+  background: var(--color-canvas-elevated);
+  border-radius: 6px;
+  padding: 20px;
+}
+
+/* Nav links — uppercase, tracked */
+.nav-link {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  transition: color 0.15s ease;
+}
+.nav-link:hover { color: var(--color-rosso); }
+
+/* Hairlines */
+.hairline { height: 1px; background: var(--color-hairline); width: 100%; }
+.hairline-rosso { height: 2px; background: var(--color-rosso); width: 100%; }
+
+/* Inline links — minimal underline */
+a.link, .prose a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-muted);
+  text-underline-offset: 3px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+a.link:hover, .prose a:hover {
+  color: var(--color-rosso);
+  text-decoration-color: var(--color-rosso);
+}
+
+/* Dot */
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* Cavallino-style block accent */
+.rosso-block {
+  background: var(--color-rosso);
+  color: var(--color-ink);
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+::selection { background: var(--color-rosso); color: var(--color-ink); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-canvas); }
+::-webkit-scrollbar-thumb { background: var(--color-canvas-elevated); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.rise { animation: rise 0.8s cubic-bezier(0.2,0.7,0.2,1) both; }

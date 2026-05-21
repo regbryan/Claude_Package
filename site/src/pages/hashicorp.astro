@@ -1,0 +1,612 @@
+---
+import "../styles/global.css";
+
+const REV_DATE = new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" });
+
+const stats = [
+  { n: "165+", l: "Specialist subagents" },
+  { n: "130+", l: "Workflow skills" },
+  { n: "20+",  l: "Live connectors" },
+  { n: "3",    l: "Plugin marketplaces" },
+  { n: "100+", l: "Hermes (parallel) skills" },
+];
+
+// 7 layers mapped to HashiCorp product accent colors
+const layers = [
+  { id: "01", t: "Operating conventions", color: "vault",     hex: "#ffcf25", d: "Visual-review discipline, evidence-based verification, no-surprise-deploy rules, sensible layout defaults, applied to every project." },
+  { id: "02", t: "Connectors",            color: "vagrant",   hex: "#1868f2", d: "Live two-way OAuth links to the tools you already use. Read, write, and act inside Gmail, Obsidian, HubSpot, Figma, Vercel, Supabase, and more." },
+  { id: "03", t: "Plugins",               color: "terraform", hex: "#7b42bc", d: "Capability bundles from three marketplaces: official Anthropic, claude-mem (persistent memory), claude-ads (paid media practice)." },
+  { id: "04", t: "Skills",                color: "waypoint",  hex: "#14c6cb", d: "130+ specialized workflows invoked automatically based on the request. From app reviews to brand systems to financial research." },
+  { id: "05", t: "Subagents",             color: "nomad",     hex: "#00ca8e", d: "165+ specialist personas. A domain expert exists for almost any task you can name. Claude routes to them with no setup." },
+  { id: "06", t: "Slash commands",        color: "boundary",  hex: "#f24c53", d: "Single-line shortcuts for multi-step jobs: quality reviews, knowledge graphs, scheduled work, interface design audits." },
+  { id: "07", t: "Hermes",                color: "consul",    hex: "#e62b1e", d: "A parallel Python-based agent for autonomous, scheduled, and background work. Runs alongside Claude Code, shares your filesystem." },
+];
+
+const connectors = [
+  { group: "Communication & schedule", items: [
+    { n: "Gmail",            url: "https://mail.google.com" },
+    { n: "Google Calendar",  url: "https://calendar.google.com" },
+    { n: "Granola",          url: "https://granola.ai" },
+    { n: "Slack",            url: "https://slack.com" },
+  ]},
+  { group: "Knowledge & files", items: [
+    { n: "Obsidian (the brain)", url: "https://obsidian.md" },
+    { n: "Box",                  url: "https://box.com" },
+    { n: "PDF Viewer",           url: null },
+  ]},
+  { group: "Sales & CRM", items: [
+    { n: "HubSpot", url: "https://hubspot.com" },
+    { n: "Apollo",  url: "https://apollo.io" },
+  ]},
+  { group: "Design & creative", items: [
+    { n: "Canva",                  url: "https://canva.com" },
+    { n: "Figma",                  url: "https://figma.com" },
+    { n: "Stitch (Google)",        url: "https://stitch.withgoogle.com" },
+    { n: "nanobanana (image gen)", url: null },
+    { n: "Higgsfield (video gen)", url: "https://higgsfield.ai" },
+    { n: "Adobe Creative Suite",   url: "https://adobe.com" },
+  ]},
+  { group: "Marketing & content", items: [
+    { n: "Selr / Marketing Studio", url: null },
+    { n: "Postiz",                  url: "https://postiz.com" },
+    { n: "Firecrawl",               url: "https://firecrawl.dev" },
+  ]},
+  { group: "Web & dev infrastructure", items: [
+    { n: "Chrome DevTools",  url: "https://github.com/ChromeDevTools/chrome-devtools-mcp" },
+    { n: "Cloudflare",       url: "https://cloudflare.com" },
+    { n: "Supabase",         url: "https://supabase.com" },
+    { n: "Vercel",           url: "https://vercel.com" },
+    { n: "autograph",        url: null },
+    { n: "MCP Registry",     url: null },
+  ]},
+  { group: "Research & intelligence", items: [
+    { n: "Bigdata.com (finance)",   url: "https://bigdata.com" },
+  ]},
+  { group: "Automation & memory", items: [
+    { n: "claude-mem",        url: "https://github.com/thedotmack/claude-mem" },
+    { n: "scheduled-tasks",   url: null },
+    { n: "Session archive",   url: null },
+  ]},
+];
+
+const plugins = [
+  {
+    n: "Marketplace 01", t: "Anthropic Official", accent: "#1868f2",
+    repo: "anthropics/claude-plugins-official",
+    url: "https://github.com/anthropics/claude-plugins-official",
+    items: ["superpowers", "claude-code-setup", "code-review · code-simplifier", "security-guidance", "frontend-design", "figma", "github", "supabase", "chrome-devtools-mcp", "firecrawl", "data", "typescript-lsp", "atomic-agents", "autofix-bot", "claude-md-management"],
+    note: "14 plugins. Every Anthropic-curated capability bundle worth installing.",
+  },
+  {
+    n: "Marketplace 02", t: "claude-mem (Memory)", accent: "#7b42bc",
+    repo: "thedotmack/claude-mem",
+    url: "https://github.com/thedotmack/claude-mem",
+    items: ["Skill: do", "Skill: make-plan", "Skill: mem-search", "Skill: smart-explore", "Worker captures observations + session summaries"],
+    note: "Persistent cross-session memory. The stack gets smarter every time you use it.",
+  },
+  {
+    n: "Marketplace 03", t: "claude-ads (Advertising)", accent: "#00ca8e",
+    repo: "AgriciDaniel/claude-ads",
+    url: "https://github.com/AgriciDaniel/claude-ads",
+    items: ["Apple · Google · Meta · LinkedIn", "Microsoft · TikTok · YouTube", "Audit · budget · creative · DNA · math", "Generate · landing · photoshoot · plan · test", "10 specialist agents · 19 sub-skills"],
+    note: "A full paid-media practice in plugin form.",
+  },
+];
+
+const skills = [
+  { t: "Pre-ship quality",         items: ["app-review", "engineering:*", "superpowers:*", "code-review", "security-review"] },
+  { t: "Brand & identity",         items: ["brand", "brand-render", "brand-voice:*", "design", "design-system", "design-motion-principles"] },
+  { t: "UI & frontend",            items: ["interface-design", "frontend-design", "impeccable", "ui-styling", "ui-ux-pro-max", "figma:*"] },
+  { t: "Visual assets",            items: ["banner-design", "slides", "canvas-design", "theme-factory", "adobe-for-creativity:*"] },
+  { t: "Video & motion",           items: ["commercial-reel", "reel-clone", "higgsfield", "ltx2", "remotion", "moviepy", "compare-video", "ffmpeg", "watch"] },
+  { t: "Audio",                    items: ["elevenlabs", "acestep", "music-generator"] },
+  { t: "Image generation",         items: ["nanobanana", "qwen-edit", "runpod"] },
+  { t: "Marketing",                items: ["marketing:*", "postiz", "claude-ads:* (19)"] },
+  { t: "Sales & revenue ops",      items: ["sales:*", "apollo:*"] },
+  { t: "Customer support",         items: ["customer-support:*"] },
+  { t: "Product management",       items: ["product-management:*"] },
+  { t: "Finance & accounting",     items: ["finance:*"] },
+  { t: "Operations",               items: ["operations:*"] },
+  { t: "Data & analytics",         items: ["data:*"] },
+  { t: "Knowledge & research",     items: ["graphify", "bigdata-com:* (24)", "firecrawl:*"] },
+  { t: "Document & file work",     items: ["pdf", "docx", "xlsx", "pptx", "pdf-viewer:*"] },
+  { t: "Slack & collaboration",    items: ["slack-by-salesforce:*"] },
+  { t: "Browser & web testing",    items: ["chrome-devtools-mcp:*"] },
+  { t: "Salesforce",               items: ["sf-changes"] },
+  { t: "Meta · build your own",    items: ["skill-creator", "mcp-builder", "loop", "schedule", "update-config", "claude-api"] },
+];
+
+const subagents = [
+  { t: "Sales & GTM",          n: 11 },
+  { t: "Marketing (global)",   n: 22 },
+  { t: "Marketing (China)",    n: 11 },
+  { t: "Paid media",           n: 7  },
+  { t: "Design & creative",    n: 14 },
+  { t: "Engineering",          n: 31 },
+  { t: "Game development",     n: 15 },
+  { t: "XR / spatial",         n: 6  },
+  { t: "Ops · finance · PM",   n: 20 },
+  { t: "Cultural advisors",    n: 10 },
+  { t: "Research & academic",  n: 9  },
+  { t: "Testing & QA",         n: 6  },
+  { t: "Behavioral · product", n: 4  },
+];
+
+const workflows = [
+  { cat: "Marketing",         q: "Draft a launch email for the new offer, save it as a Gmail draft, prep a matching Canva post in our brand template, and schedule it to LinkedIn via Postiz next Tuesday at 9am." },
+  { cat: "Paid advertising",  q: "Audit our Google Ads account, surface wasted spend, and rewrite the top 5 underperforming ads using our brand voice." },
+  { cat: "Sales operations",  q: "Pull this week's new HubSpot deals over $10K, enrich each contact via Apollo, draft a follow-up sequence for each, and put a prep brief in Obsidian." },
+  { cat: "Brand & design",    q: "Build a brand identity for [client]. Logo options, color system, typography, full corporate identity program with 50 mockups, three banner variants." },
+  { cat: "Video",             q: "Clone this Instagram reel. Same pacing, swap the visuals via Higgsfield, write the script, generate the voiceover, render the final MP4." },
+  { cat: "Web & dev",         q: "Build a landing page. Use our brand tokens, generate components from the Figma file, run the full app-review, deploy to Vercel." },
+  { cat: "Meetings",          q: "Summarize yesterday's Granola call, draft a recap email, create follow-up tasks in HubSpot, Slack the team, block prep time on Friday." },
+  { cat: "Research",          q: "Run a Bigdata.com investment memo on [company], pull recent news via Firecrawl, build a peer comparables table, save it as a note in Obsidian with a knowledge graph via /graphify." },
+  { cat: "Finance & ops",     q: "Reconcile last month's bank statement, generate journal entries, draft variance analysis vs budget, produce the financial statements package." },
+  { cat: "Obsidian-centric",  q: "Check my vault. What did I decide about [client] last month? Pull every related note, summarize the through-line, draft my next message to them." },
+  { cat: "Automation",        q: "Every weekday at 7am, run my morning brief: yesterday's calendar, today's calendar, overnight inbox, top 3 priorities. Drop it in Obsidian and Slack it to me." },
+];
+
+const installSteps = [
+  { id: "01", t: "Install Claude Code",          time: "5 min",     d: "Download and sign in.", link: { t: "claude.com/claude-code", url: "https://claude.com/claude-code" } },
+  { id: "02", t: "Apply operating conventions",  time: "2 min",     d: "Your CLAUDE.md rules drop into ~/.claude/. Picked up automatically.", link: null },
+  { id: "03", t: "Add plugin marketplaces",      time: "5 min",     d: "Three repos registered.", link: { t: "claude-plugins-official", url: "https://github.com/anthropics/claude-plugins-official" } },
+  { id: "04", t: "Enable plugins",               time: "5 min",     d: "14 from official, claude-mem, claude-ads.", link: null },
+  { id: "05", t: "Install skills",               time: "10 min",    d: "130+ skills copied to ~/.claude/skills/.", link: null },
+  { id: "06", t: "Install subagents",            time: "5 min",     d: "165+ specialist personas dropped into ~/.claude/agents/.", link: null },
+  { id: "07", t: "Connect your tools",           time: "20–30 min", d: "Each connector: click Sign in, authorize via OAuth. Done with you on a call.", link: null },
+  { id: "08", t: "Install Hermes (optional)",    time: "10 min",    d: "Python parallel agent for autonomous and scheduled work.", link: null },
+  { id: "09", t: "Install system tooling",       time: "5 min",     d: "gitleaks, osv-scanner, syft, semgrep via winget or brew.", link: { t: "semgrep.dev", url: "https://semgrep.dev" } },
+  { id: "10", t: "Test drive",                   time: "10–15 min", d: "We run real requests together so you see the stack work end-to-end.", link: null },
+];
+
+const sysTools = [
+  { n: "gitleaks",      url: "https://github.com/gitleaks/gitleaks",            d: "Secret detection" },
+  { n: "osv-scanner",   url: "https://google.github.io/osv-scanner/",           d: "Dependency CVE scanner" },
+  { n: "syft",          url: "https://github.com/anchore/syft",                 d: "Software bill of materials" },
+  { n: "semgrep",       url: "https://semgrep.dev",                             d: "Static analysis security scanner" },
+  { n: "Biome",         url: "https://biomejs.dev",                             d: "Lint + format" },
+  { n: "Knip",          url: "https://knip.dev",                                d: "Dead code detection" },
+  { n: "Madge",         url: "https://github.com/pahen/madge",                  d: "Circular dependency detection" },
+  { n: "axe-core",      url: "https://github.com/dequelabs/axe-core",           d: "Accessibility" },
+  { n: "Lighthouse CI", url: "https://github.com/GoogleChrome/lighthouse-ci",   d: "Perf, a11y, SEO budgets" },
+  { n: "size-limit",    url: "https://github.com/ai/size-limit",                d: "Bundle size budgets" },
+  { n: "Lefthook",      url: "https://github.com/evilmartians/lefthook",        d: "Git hooks" },
+  { n: "Playwright",    url: "https://playwright.dev",                          d: "E2E + visual regression" },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="A premium Claude Code workstation, installed by hand. 165+ specialist subagents, 130+ skills, 20+ live tool connectors, three plugin marketplaces, persistent memory, and a parallel agent. Built around Obsidian." />
+    <title>The Stack — A Claude Code workstation, installed by hand</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,300..900;1,300..900&display=swap" />
+  </head>
+
+  <body class="min-h-screen">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="relative mx-auto max-w-[1800px] px-6 md:px-10 lg:px-14">
+
+      <!-- VARIANT SWITCHER -->
+      <div class="flex items-center justify-end gap-3 pt-4 caption text-ink-subtle">
+        <span>Variants:</span>
+        <a href="/" class="link text-ink-muted">Linear</a>
+        <span style="color: var(--color-vault);">HashiCorp</span>
+        <a href="/ferrari" class="link text-ink-muted">Ferrari</a>
+      </div>
+
+      <!-- ========== TOP NAV ========== -->
+      <nav class="flex items-center justify-between py-5 border-b border-hairline" style="border-color: rgba(178,182,189,0.1);">
+        <div class="flex items-center gap-4">
+          <span class="body-sm font-bold tracking-wider">THE&nbsp;STACK</span>
+          <span class="caption text-ink-subtle hidden md:inline">Rev {REV_DATE}</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6 body-sm text-ink-muted">
+          <a href="#layers" class="hover:text-ink transition-colors">Layers</a>
+          <a href="#connectors" class="hover:text-ink transition-colors">Connectors</a>
+          <a href="#plugins" class="hover:text-ink transition-colors">Plugins</a>
+          <a href="#skills" class="hover:text-ink transition-colors">Skills</a>
+          <a href="#install" class="hover:text-ink transition-colors">Install</a>
+        </div>
+        <a href="#install" class="btn-primary">Book install →</a>
+      </nav>
+
+      <!-- ========== HERO ========== -->
+      <main id="main">
+      <section class="pt-8 md:pt-12 pb-20 md:pb-24">
+        <div class="grid grid-cols-12 gap-6">
+          <div class="col-span-12 lg:col-span-10 rise">
+            <div class="eyebrow mb-6" style="color: var(--color-vault);">
+              01 / The setup, fully configured
+            </div>
+            <h1 class="display-xl">
+              A Claude Code workstation,<br/>
+              installed by hand.
+            </h1>
+            <p class="body-lg mt-8 max-w-3xl text-ink-muted">
+              A complete, opinionated configuration of <a href="https://claude.com/claude-code">Claude Code</a>, assembled, tuned, and installed on your machine. One AI that runs your marketing, sales, design, video, engineering, operations, finance, and knowledge work. Built around <a href="https://obsidian.md">Obsidian</a>. Paired with <strong style="color: var(--color-ink);">165 specialist subagents, 130 workflow skills, 20 live tool connectors, three plugin marketplaces</strong>, and a parallel agent running another 100 skills in the background.
+            </p>
+            <div class="mt-10 flex flex-wrap items-center gap-3">
+              <a href="#install" class="btn-primary">Begin installation</a>
+              <a href="#layers" class="btn-secondary">View the seven layers</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== OBSIDIAN CALLOUT ========== -->
+      <section class="py-20 md:py-24">
+        <div class="card" style="padding: 48px;">
+          <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-12 md:col-span-5">
+              <span class="eyebrow" style="color: var(--color-vagrant);">Featured · The brain of the setup</span>
+              <h2 class="display-lg mt-4">
+                Obsidian is the<br/>brain of the operation.
+              </h2>
+              <a href="https://obsidian.md" class="link body-sm mt-6 inline-block">obsidian.md →</a>
+            </div>
+            <div class="col-span-12 md:col-span-7 body-base text-ink-muted space-y-4 prose">
+              <p>
+                One connector deserves a callout up front. <strong style="color: var(--color-ink);"><a href="https://obsidian.md">Obsidian</a> is your second brain and the system of record for the entire setup.</strong> Every Claude session ends with an automatic log entry in your vault. Every brief, recap, research note, meeting summary, and project plan lands there.
+              </p>
+              <p>
+                When Claude needs to remember last week, it searches your vault. When you want to know what got done, it's already written down. <a href="#hermes">Hermes</a>, the parallel agent, also reads and writes to Obsidian, so morning briefs, weekly reviews, and recurring research land in the same place.
+              </p>
+              <p style="color: var(--color-ink);">
+                If you've never used Obsidian: your notes are plain Markdown files on your machine. No one else's cloud. The setup turns it into the persistent memory layer that ties everything else together.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== LAYERS ========== -->
+      <section id="layers" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-14">
+          <div class="col-span-12 md:col-span-5">
+            <span class="eyebrow text-ink-muted">§ 01 · System architecture</span>
+            <h2 class="display-lg mt-4">The seven layers.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-lg text-ink-muted">
+            Each layer is independent. Each replaceable. Together they make a stack that's hard to walk away from once you've used it for a week. Each layer carries its own identity color, like a tool in a multi-product suite.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {layers.map((l) => (
+            <article class="card">
+              <div class="eyebrow mb-4" style={`color: ${l.hex};`}>§ {l.id}</div>
+              <h3 class="card-title" style={`color: ${l.hex};`}>{l.t}</h3>
+              <p class="body-sm text-ink-muted mt-3">{l.d}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- ========== CONNECTORS ========== -->
+      <section id="connectors" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-14">
+          <div class="col-span-12 md:col-span-5">
+            <span class="eyebrow" style="color: var(--color-vagrant);">§ 02 · Connectors</span>
+            <h2 class="display-lg mt-4">Live two-way OAuth links.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-lg text-ink-muted">
+            Sign in once per connector. After that, Claude reads, writes, and acts inside each tool the same way you would. All credentials live on your machine. Revoke any time, same control as any other OAuth app.
+          </div>
+        </div>
+
+        <div class="border-t" style="border-color: rgba(178,182,189,0.1);">
+          {connectors.map((g) => (
+            <div class="run-row">
+              <div class="card-title" style="font-size: 18px; color: var(--color-vagrant);">{g.group}</div>
+              <div class="body-base text-ink-muted">
+                {g.items.map((it, i) => (
+                  <>
+                    {it.url ? (
+                      <a href={it.url} class="link">{it.n}</a>
+                    ) : (
+                      <span class="text-ink">{it.n}</span>
+                    )}
+                    {i < g.items.length - 1 && <span class="text-ink-subtle">  ·  </span>}
+                  </>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ========== PLUGINS ========== -->
+      <section id="plugins" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-12">
+          <div class="col-span-12 md:col-span-5">
+            <span class="eyebrow" style="color: var(--color-terraform);">§ 03 · Plugins</span>
+            <h2 class="display-lg mt-4">Three marketplaces.<br/>Sixteen plugins.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-lg text-ink-muted">
+            Plugins are bundles of related capabilities. Install one, get a whole feature surface. The setup pulls from three marketplaces, each curated for a different purpose.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {plugins.map((p) => (
+            <article class="card">
+              <div class="eyebrow mb-4" style={`color: ${p.accent};`}>{p.n}</div>
+              <h3 class="card-title" style={`color: ${p.accent};`}>{p.t}</h3>
+              <p class="body-sm text-ink-muted mt-3 italic">{p.note}</p>
+              <div class="hairline my-5"></div>
+              <ul class="space-y-1.5 body-sm">
+                {p.items.map((it) => (
+                  <li class="text-ink-muted">{it}</li>
+                ))}
+              </ul>
+              <a href={p.url} class="link caption mt-5 inline-block">{p.repo} ↗</a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- ========== SKILLS ========== -->
+      <section id="skills" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-14">
+          <div class="col-span-12 md:col-span-5">
+            <span class="eyebrow" style="color: var(--color-waypoint);">§ 04 · Skills</span>
+            <h2 class="display-lg mt-4">130 workflows.<br/>Invoked automatically.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-lg text-ink-muted">
+            Skills are how Claude actually does the work. Each is a step-by-step procedure for a specific job. You don't pick them. They activate based on the request. The full taxonomy below.
+          </div>
+        </div>
+
+        <div class="border-t" style="border-color: rgba(178,182,189,0.1);">
+          {skills.map((g) => (
+            <div class="run-row">
+              <div class="card-title" style="font-size: 17px; color: var(--color-waypoint);">{g.t}</div>
+              <div class="body-base text-ink-muted" style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; line-height: 1.7;">
+                {g.items.join(", ")}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- ========== SUBAGENTS ========== -->
+      <section class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6">
+          <div class="col-span-12 md:col-span-5">
+            <span class="eyebrow" style="color: var(--color-nomad);">§ 05 · Subagents</span>
+            <h2 class="display-lg mt-4">
+              A specialist team of <span style="color: var(--color-nomad);">165</span>, across thirteen domains.
+            </h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-lg text-ink-muted">
+            <p>
+              Subagents are named expert personas Claude delegates to when a task needs deep specialization. Say <em>"audit my landing page,"</em> and Claude pulls in the accessibility auditor, the paid-media creative strategist, the design critique agent, and the reality checker, automatically. The roster:
+            </p>
+            <p class="mt-6 body-base" style="color: var(--color-ink); line-height: 1.8;">
+              {subagents.map((g, i) => (
+                <>
+                  <strong>{g.t}</strong> <span class="text-ink-muted">({g.n})</span>{i < subagents.length - 1 && <span class="text-ink-subtle">  ·  </span>}
+                </>
+              ))}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== HERMES ========== -->
+      <section id="hermes" class="py-20 md:py-24">
+        <div class="card" style="padding: 48px; border-left: 3px solid var(--color-consul);">
+          <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-12 md:col-span-5">
+              <span class="eyebrow" style="color: var(--color-consul);">§ 06 · The parallel agent</span>
+              <h2 class="display-lg mt-4">
+                Hermes never sleeps.
+              </h2>
+              <a href="#" class="caption text-ink-subtle mt-4 inline-block">100+ Hermes skills</a>
+            </div>
+            <div class="col-span-12 md:col-span-7 body-base text-ink-muted space-y-4 prose">
+              <p>
+                Hermes is a parallel Python-based agent that runs autonomous and scheduled work while Claude Code handles your interactive sessions. They share your filesystem but operate independently. Useful for background jobs that shouldn't tie up your main session.
+              </p>
+              <p style="color: var(--color-ink);">
+                100+ Hermes skills across Apple ecosystem, autonomous orchestration, creative tooling, data science, DevOps, email, GitHub, MCP scaffolding, media, MLOps, note-taking, productivity, research, smart home, social media, and software development.
+              </p>
+              <p class="italic">
+                Example: <em>"Every weekday at 7am, run my morning brief: yesterday's calendar, today's calendar, overnight inbox, top 3 priorities. Drop it in Obsidian and Slack it to me."</em> Hermes handles the cron. You just receive the brief.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== WORKFLOWS ========== -->
+      <section class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-14">
+          <div class="col-span-12 md:col-span-5">
+            <span class="eyebrow" style="color: var(--color-boundary);">§ 07 · Day-to-day</span>
+            <h2 class="display-lg mt-4">
+              What you'll actually say to it.
+            </h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-lg text-ink-muted">
+            Plain English. Claude figures out which tools, skills, and subagents to use. A sample of real day-to-day requests below, pasted verbatim from client logs.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6">
+          {workflows.map((w, i) => (
+            <figure class="col-span-12 md:col-span-10 md:col-start-2 grid grid-cols-12 gap-6 py-7 border-t" style="border-color: rgba(178,182,189,0.1);">
+              <div class="col-span-12 md:col-span-2 hang-num" style="color: var(--color-boundary);">№ {String(i + 1).padStart(2, "0")} <span class="text-ink-subtle">/ {w.cat}</span></div>
+              <blockquote class="col-span-12 md:col-span-10 body-lg" style="font-size: 20px; line-height: 1.5; color: var(--color-ink);">
+                "{w.q}"
+              </blockquote>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <!-- ========== INSTALLATION ========== -->
+      <section id="install" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-12">
+          <div class="col-span-12 md:col-span-7">
+            <span class="eyebrow text-ink-muted">§ 08 · Installation</span>
+            <h2 class="display-lg mt-4">Procedure.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-5 body-lg text-ink-muted">
+            Ten steps. 60–90 minutes. Mostly automated. The slow part is signing into each tool you want connected. That part I do with you on a call so we confirm each one works before moving on.
+          </div>
+        </div>
+
+        <ol class="space-y-3">
+          {installSteps.map((s) => (
+            <li class="card">
+              <div class="grid grid-cols-12 gap-4 items-baseline">
+                <div class="col-span-2 md:col-span-1 display-md" style="font-size: 28px; color: var(--color-ink-subtle);">{s.id}</div>
+                <div class="col-span-10 md:col-span-3 card-title">{s.t}</div>
+                <div class="col-span-3 md:col-span-2 caption text-ink-muted">{s.time}</div>
+                <div class="col-span-9 md:col-span-6 body-sm text-ink-muted">
+                  {s.d}
+                  {s.link && (<>
+                    {" "}<a href={s.link.url} class="link">{s.link.t} ↗</a>
+                  </>)}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <!-- ========== SYSTEM TOOLING ========== -->
+      <section class="py-12 md:py-16">
+        <div class="grid grid-cols-12 gap-6 mb-12">
+          <div class="col-span-12 md:col-span-7">
+            <h2 class="display-md mt-2">System tooling.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-5 body-lg text-ink-muted">
+            A handful of CLI tools on your machine to support the workflows. Plus a default dev-dependency stack auto-seeded into new web projects. All local, all free, no SaaS lock-in.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {sysTools.map((tool) => (
+            <article class="card-tight flex items-baseline justify-between gap-4">
+              <div>
+                <a href={tool.url} class="link card-title" style="font-size: 16px;">{tool.n}</a>
+                <div class="caption text-ink-muted mt-1">{tool.d}</div>
+              </div>
+              <span class="caption text-ink-subtle">↗</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- ========== AFTERCARE ========== -->
+      <section class="py-12 md:py-16">
+        <div class="grid grid-cols-12 gap-6">
+          <div class="col-span-12 md:col-span-4">
+            <h2 class="display-md mt-2">Maintenance.</h2>
+          </div>
+
+          <div class="col-span-12 md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="card">
+              <div class="card-title mb-3" style="font-size: 18px;">Updates</div>
+              <p class="body-sm text-ink-muted">Plugins, skills, and connectors update themselves. Quarterly maintenance pass to add what's new and prune what's no longer useful.</p>
+            </div>
+            <div class="card">
+              <div class="card-title mb-3" style="font-size: 18px;">Adding a tool</div>
+              <p class="body-sm text-ink-muted">New tool in your stack? Most have a Claude connector. We add it in 5 minutes.</p>
+            </div>
+            <div class="card">
+              <div class="card-title mb-3" style="font-size: 18px;">If something breaks</div>
+              <p class="body-sm text-ink-muted">Restart Claude Code. Run <code style="color: var(--color-ink); background: var(--color-surface-2); padding: 1px 6px; border-radius: 4px; font-size: 13px;">/doctor</code>. Still stuck? Reach out. I keep a record of your install.</p>
+            </div>
+            <div class="card">
+              <div class="card-title mb-3" style="font-size: 18px;">Privacy &amp; control</div>
+              <p class="body-sm text-ink-muted">All credentials on your machine. OAuth, same revoke-anytime control as any app. Claude only acts when you ask it to.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== OPTIONAL ========== -->
+      <section class="py-12 md:py-16">
+        <div class="grid grid-cols-12 gap-6 mb-10">
+          <div class="col-span-12 md:col-span-5">
+            <h2 class="display-md mt-2">Optional add-ons.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-lg text-ink-muted">
+            A few capabilities I leave out by default. Ask if any apply to you.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <article class="card-tight"><strong>RunPod GPU pipelines.</strong> <span class="text-ink-muted body-sm">High-volume image and video work needing real horsepower.</span></article>
+          <article class="card-tight"><strong>Self-hosted MoviePy / LTX-2 / Qwen-Edit.</strong> <span class="text-ink-muted body-sm">For clients running their own video stacks.</span></article>
+          <article class="card-tight"><strong>Game dev subagents</strong> (<a href="https://unity.com" class="link">Unity</a>, <a href="https://unrealengine.com" class="link">Unreal</a>, <a href="https://godotengine.org" class="link">Godot</a>, <a href="https://roblox.com" class="link">Roblox</a>, <a href="https://blender.org" class="link">Blender</a>). <span class="text-ink-muted body-sm">Only for game studios.</span></article>
+          <article class="card-tight"><strong>XR &amp; spatial computing subagents.</strong> <span class="text-ink-muted body-sm">Only for visionOS and spatial-app work.</span></article>
+          <article class="card-tight"><strong>China-market specialists</strong> (Baidu, Bilibili, Douyin, Kuaishou, Weibo, Xiaohongshu, Zhihu, WeChat). <span class="text-ink-muted body-sm">For clients selling into mainland China.</span></article>
+          <article class="card-tight"><strong>HyperFrames video pipeline.</strong> <span class="text-ink-muted body-sm">Local HTML+GSAP+Puppeteer programmatic short-form video.</span></article>
+          <article class="card-tight"><strong>Salesforce-specific tooling.</strong> <span class="text-ink-muted body-sm">Only if you're in the Salesforce ecosystem.</span></article>
+          <article class="card-tight"><strong>Bigdata.com financial research.</strong> <span class="text-ink-muted body-sm">Only for finance and investment workflows.</span></article>
+        </div>
+      </section>
+
+      <!-- ========== CTA ========== -->
+      <section class="py-20 md:py-28">
+        <div class="cta-banner">
+          <div class="grid grid-cols-12 gap-6 items-end">
+            <div class="col-span-12 md:col-span-8">
+              <span class="eyebrow text-ink-muted">§ 12 · Begin</span>
+              <h2 class="display-lg mt-4">Pick a date.<br/>I'll handle the rest.</h2>
+              <p class="body-lg text-ink-muted mt-5 max-w-2xl">
+                Reach out and we'll book a 90-minute install window. I prep your config in advance. Your time is spent confirming logins and seeing the stack work.
+              </p>
+            </div>
+            <div class="col-span-12 md:col-span-4 flex flex-col gap-3 md:items-end">
+              <a href="#" class="btn-primary">Book install →</a>
+              <a href="#" class="btn-secondary">Talk first</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      </main>
+
+      <!-- ========== FOOTER ========== -->
+      <footer class="py-12 md:py-16 border-t" style="border-color: rgba(178,182,189,0.1);">
+        <div class="grid grid-cols-12 gap-6">
+          <div class="col-span-6 md:col-span-3">
+            <div class="caption text-ink-muted mb-3">THE STACK</div>
+            <p class="body-sm text-ink-muted">A Claude Code workstation, installed by hand. Maintained quarterly.</p>
+          </div>
+          <div class="col-span-6 md:col-span-3">
+            <div class="caption text-ink-muted mb-3">Operator</div>
+            <p class="body-sm">Reggie</p>
+            <p class="caption text-ink-subtle mt-1">Installer · Maintainer</p>
+          </div>
+          <div class="col-span-6 md:col-span-3">
+            <div class="caption text-ink-muted mb-3">Set in</div>
+            <p class="body-sm text-ink-muted"><a href="https://fonts.google.com/specimen/Overpass" class="link">Overpass</a></p>
+            <p class="caption text-ink-subtle mt-1">Highway Gothic origin · RedHat pedigree</p>
+          </div>
+          <div class="col-span-6 md:col-span-3">
+            <div class="caption text-ink-muted mb-3">Design</div>
+            <p class="caption text-ink-subtle">Built on the <a href="https://github.com/voltagent/awesome-design-md" class="link">HashiCorp DESIGN.md</a>. Per-layer accent colors from the HashiCorp infrastructure suite.</p>
+          </div>
+        </div>
+        <div class="hairline mt-10"></div>
+        <div class="flex flex-wrap items-baseline justify-between mt-4 gap-3">
+          <div class="caption text-ink-subtle">Rev {REV_DATE} · Document STK-001</div>
+          <div class="caption text-ink-subtle">Privacy · All credentials local · OAuth · Revoke anytime</div>
+        </div>
+      </footer>
+
+    </div>
+  </body>
+</html>

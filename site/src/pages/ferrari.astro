@@ -1,0 +1,362 @@
+---
+import "../styles/ferrari.css";
+import { stats, layers, connectors, plugins, skills, subagents, workflows, installSteps, sysTools } from "../content";
+
+const REV_DATE = new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" });
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="The Stack — Ferrari variant. A Claude Code workstation, installed by hand." />
+    <title>The Stack · Ferrari variant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&display=swap" />
+  </head>
+
+  <body class="min-h-screen">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="relative mx-auto max-w-[1800px] px-6 md:px-10 lg:px-14">
+
+      <!-- VARIANT SWITCHER -->
+      <div class="flex items-center justify-end gap-3 pt-4 caption">
+        <span style="color: var(--color-muted);">Variants:</span>
+        <a href="/" class="link" style="color: var(--color-muted);">Linear</a>
+        <a href="/hashicorp" class="link" style="color: var(--color-muted);">HashiCorp</a>
+        <span class="rosso-block">Ferrari</span>
+      </div>
+
+      <!-- NAV -->
+      <nav class="flex items-center justify-between py-5 mt-3" style="border-bottom: 1px solid var(--color-hairline);">
+        <div class="flex items-center gap-4">
+          <span class="rosso-block">STK</span>
+          <span class="nav-link">The Stack</span>
+          <span class="caption" style="color: var(--color-muted);">/ Rev {REV_DATE}</span>
+        </div>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#layers" class="nav-link">Layers</a>
+          <a href="#connectors" class="nav-link">Connectors</a>
+          <a href="#plugins" class="nav-link">Plugins</a>
+          <a href="#skills" class="nav-link">Skills</a>
+          <a href="#install" class="nav-link">Install</a>
+        </div>
+        <a href="#install" class="btn-primary">Book install</a>
+      </nav>
+
+      <!-- HERO -->
+      <main id="main">
+      <section class="pt-8 md:pt-12 pb-20 md:pb-24">
+        <div class="grid grid-cols-12 gap-6">
+          <div class="col-span-12 lg:col-span-11 rise">
+            <div class="flex items-center gap-3 mb-6">
+              <span class="rosso-block">001</span>
+              <span class="caption-uppercase">The setup · Fully configured</span>
+            </div>
+            <h1 class="display-mega">
+              A Claude Code workstation,<br/>
+              installed by hand.
+            </h1>
+            <p class="body-md mt-8 max-w-3xl" style="font-size: 18px; line-height: 1.65;">
+              A complete, opinionated configuration of <a href="https://claude.com/claude-code">Claude Code</a>, assembled, tuned, and installed on your machine. One AI that runs your marketing, sales, design, video, engineering, operations, finance, and knowledge work. Built around <a href="https://obsidian.md">Obsidian</a>. Paired with <strong style="color: var(--color-ink);">165 specialist subagents, 130 workflow skills, 20 live tool connectors, three plugin marketplaces</strong>, and a parallel agent running another 100 skills in the background.
+            </p>
+            <div class="mt-10 flex flex-wrap items-center gap-3">
+              <a href="#install" class="btn-primary">Begin installation</a>
+              <a href="#layers" class="btn-outline">View the seven layers</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- OBSIDIAN -->
+      <section class="py-20 md:py-24">
+        <div class="card" style="padding: 56px;">
+          <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-12 md:col-span-5">
+              <span class="caption-uppercase" style="color: var(--color-rosso);">Featured · The brain</span>
+              <h2 class="display-xl mt-4">Obsidian is the brain of the operation.</h2>
+              <a href="https://obsidian.md" class="link body-md mt-6 inline-block" style="font-size: 14px;">obsidian.md →</a>
+            </div>
+            <div class="col-span-12 md:col-span-7 prose space-y-4" style="font-size: 15px; line-height: 1.7;">
+              <p><strong style="color: var(--color-ink);"><a href="https://obsidian.md">Obsidian</a> is your second brain and the system of record for the entire setup.</strong> Every Claude session ends with an automatic log entry in your vault. Every brief, recap, research note, meeting summary, and project plan lands there.</p>
+              <p>When Claude needs to remember last week, it searches your vault. <a href="#hermes">Hermes</a>, the parallel agent, also reads and writes to Obsidian.</p>
+              <p style="color: var(--color-ink);">Your notes are plain Markdown files on your machine. No one else's cloud. The setup turns it into the persistent memory layer that ties everything else together.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LAYERS -->
+      <section id="layers" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-14">
+          <div class="col-span-12 md:col-span-5">
+            <span class="caption-uppercase" style="color: var(--color-muted);">§ 01 · System architecture</span>
+            <h2 class="display-xl mt-4">The seven layers.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-md" style="font-size: 16px; line-height: 1.6;">
+            Each layer is independent. Each replaceable. Together they make a stack that's hard to walk away from once you've used it for a week.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          {layers.map((l) => (
+            <article class="card" style="padding: 28px;">
+              <div class="caption-uppercase mb-5" style="color: var(--color-rosso);">§ {l.id}</div>
+              <h3 class="title-md" style="font-size: 22px;">{l.t}</h3>
+              <p class="body-sm mt-3">{l.d}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- CONNECTORS -->
+      <section id="connectors" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-14">
+          <div class="col-span-12 md:col-span-5">
+            <span class="caption-uppercase" style="color: var(--color-muted);">§ 02 · Connectors</span>
+            <h2 class="display-xl mt-4">Live two-way OAuth links.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-md" style="font-size: 16px; line-height: 1.6;">
+            Sign in once per connector. After that, Claude reads, writes, and acts inside each tool the same way you would.
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-hairline);">
+          {connectors.map((g) => (
+            <div class="run-row">
+              <div class="caption-uppercase" style="color: var(--color-rosso);">{g.group}</div>
+              <div class="body-md" style="font-size: 15px; line-height: 1.7;">
+                {g.items.map((it, i) => (
+                  <>
+                    {it.url ? <a href={it.url} class="link">{it.n}</a> : <span style="color: var(--color-ink);">{it.n}</span>}
+                    {i < g.items.length - 1 && <span style="color: var(--color-muted);">  ·  </span>}
+                  </>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- PLUGINS -->
+      <section id="plugins" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-12">
+          <div class="col-span-12 md:col-span-5">
+            <span class="caption-uppercase" style="color: var(--color-muted);">§ 03 · Plugins</span>
+            <h2 class="display-xl mt-4">Three marketplaces. Sixteen plugins.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-md" style="font-size: 16px; line-height: 1.6;">
+            Bundles of related capabilities. The setup pulls from three marketplaces, each curated for a different purpose.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {plugins.map((p, i) => (
+            <article class="card" style="padding: 28px;">
+              <div class="flex items-center justify-between mb-4">
+                <span class="caption-uppercase" style="color: var(--color-rosso);">{p.n}</span>
+                <span class="rosso-block">0{i + 1}</span>
+              </div>
+              <h3 class="title-md" style="font-size: 22px;">{p.t}</h3>
+              <p class="body-sm mt-3" style="font-style: italic;">{p.note}</p>
+              <div class="hairline my-5"></div>
+              <ul class="space-y-1.5 body-sm">
+                {p.items.map((it) => <li>{it}</li>)}
+              </ul>
+              <a href={p.url} class="link caption mt-5 inline-block">{p.repo} ↗</a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-14">
+          <div class="col-span-12 md:col-span-5">
+            <span class="caption-uppercase" style="color: var(--color-muted);">§ 04 · Skills</span>
+            <h2 class="display-xl mt-4">130 workflows.<br/>Invoked automatically.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-md" style="font-size: 16px; line-height: 1.6;">
+            You don't pick them. They activate based on the request. The full taxonomy below.
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-hairline);">
+          {skills.map((g) => (
+            <div class="run-row">
+              <div class="title-sm">{g.t}</div>
+              <div style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; line-height: 1.75; color: var(--color-body);">
+                {g.items.join(", ")}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- SUBAGENTS -->
+      <section class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6">
+          <div class="col-span-12 md:col-span-5">
+            <span class="caption-uppercase" style="color: var(--color-muted);">§ 05 · Subagents</span>
+            <h2 class="display-xl mt-4">A specialist team of <span style="color: var(--color-rosso);">165</span>, across thirteen domains.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-md" style="font-size: 16px; line-height: 1.6;">
+            <p>Named expert personas Claude delegates to when a task needs deep specialization. Say <em>"audit my landing page,"</em> and Claude pulls in the accessibility auditor, the paid-media creative strategist, the design critique agent, and the reality checker, automatically. The roster:</p>
+            <p class="mt-6" style="font-size: 15px; line-height: 1.85; color: var(--color-ink);">
+              {subagents.map((g, i) => (
+                <>
+                  <strong>{g.t}</strong> <span style="color: var(--color-body);">({g.n})</span>{i < subagents.length - 1 && <span style="color: var(--color-muted);">  ·  </span>}
+                </>
+              ))}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- HERMES -->
+      <section id="hermes" class="py-20 md:py-24">
+        <div class="card" style="padding: 56px;">
+          <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-12 md:col-span-5">
+              <span class="caption-uppercase" style="color: var(--color-rosso);">§ 06 · The parallel agent</span>
+              <h2 class="display-xl mt-4">Hermes never sleeps.</h2>
+              <span class="rosso-block mt-4 inline-block">100+ skills</span>
+            </div>
+            <div class="col-span-12 md:col-span-7 prose space-y-4" style="font-size: 15px; line-height: 1.7;">
+              <p>Hermes is a parallel Python-based agent that runs autonomous and scheduled work while Claude Code handles your interactive sessions. They share your filesystem but operate independently.</p>
+              <p style="color: var(--color-ink);">100+ Hermes skills across Apple ecosystem, autonomous orchestration, creative tooling, DevOps, GitHub, MCP scaffolding, MLOps, note-taking, productivity, research, and software development.</p>
+              <p style="font-style: italic;">Example: <em>"Every weekday at 7am, run my morning brief. Drop it in Obsidian and Slack it to me."</em></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORKFLOWS -->
+      <section class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-14">
+          <div class="col-span-12 md:col-span-5">
+            <span class="caption-uppercase" style="color: var(--color-muted);">§ 07 · Day-to-day</span>
+            <h2 class="display-xl mt-4">What you'll actually say to it.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-6 md:col-start-7 body-md" style="font-size: 16px; line-height: 1.6;">
+            Plain English. A sample of real day-to-day requests below, pasted verbatim from client logs.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6">
+          {workflows.map((w, i) => (
+            <figure class="col-span-12 md:col-span-10 md:col-start-2 grid grid-cols-12 gap-6 py-7" style="border-top: 1px solid var(--color-hairline);">
+              <div class="col-span-12 md:col-span-2 hang-num">№ {String(i + 1).padStart(2, "0")} <span style="color: var(--color-muted);">/ {w.cat}</span></div>
+              <blockquote class="col-span-12 md:col-span-10 title-sm" style="font-size: 19px; line-height: 1.55; color: var(--color-ink);">"{w.q}"</blockquote>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <!-- INSTALL -->
+      <section id="install" class="py-20 md:py-24">
+        <div class="grid grid-cols-12 gap-6 mb-12">
+          <div class="col-span-12 md:col-span-7">
+            <span class="caption-uppercase" style="color: var(--color-muted);">§ 08 · Installation</span>
+            <h2 class="display-xl mt-4">Procedure.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-5 body-md" style="font-size: 16px; line-height: 1.6;">
+            Ten steps. 60–90 minutes. Mostly automated. The slow part is signing in.
+          </div>
+        </div>
+
+        <ol class="space-y-2">
+          {installSteps.map((s) => (
+            <li class="card" style="padding: 24px;">
+              <div class="grid grid-cols-12 gap-4 items-baseline">
+                <div class="col-span-2 md:col-span-1 number-display" style="font-size: 28px; color: var(--color-rosso);">{s.id}</div>
+                <div class="col-span-10 md:col-span-3 title-md">{s.t}</div>
+                <div class="col-span-3 md:col-span-2 caption-uppercase">{s.time}</div>
+                <div class="col-span-9 md:col-span-6 body-sm">
+                  {s.d}
+                  {s.link && (<>{" "}<a href={s.link.url} class="link">{s.link.t} ↗</a></>)}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <!-- SYSTEM TOOLING -->
+      <section class="py-12 md:py-16">
+        <div class="grid grid-cols-12 gap-6 mb-12">
+          <div class="col-span-12 md:col-span-7">
+            <h2 class="display-lg mt-2">System tooling.</h2>
+          </div>
+          <div class="col-span-12 md:col-span-5 body-md" style="font-size: 16px; line-height: 1.6;">
+            All local, all free, no SaaS lock-in.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {sysTools.map((tool) => (
+            <article class="card-tight flex items-baseline justify-between gap-4">
+              <div>
+                <a href={tool.url} class="link title-sm">{tool.n}</a>
+                <div class="caption mt-1">{tool.d}</div>
+              </div>
+              <span class="caption">↗</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="py-20 md:py-24">
+        <div class="card" style="padding: 56px;">
+          <div class="grid grid-cols-12 gap-6 items-end">
+            <div class="col-span-12 md:col-span-8">
+              <span class="caption-uppercase" style="color: var(--color-rosso);">§ 10 · Begin</span>
+              <h2 class="display-mega mt-4" style="font-size: clamp(40px, 5vw, 64px);">Pick a date. I'll handle the rest.</h2>
+              <p class="body-md mt-5 max-w-2xl" style="font-size: 16px; line-height: 1.6;">
+                Reach out and we'll book a 90-minute install window. I prep your config in advance. Your time is spent confirming logins and seeing the stack work.
+              </p>
+            </div>
+            <div class="col-span-12 md:col-span-4 flex flex-col gap-3 md:items-end">
+              <a href="#" class="btn-primary">Book install</a>
+              <a href="#" class="btn-outline">Talk first</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="py-12 md:py-16" style="border-top: 1px solid var(--color-hairline);">
+        <div class="grid grid-cols-12 gap-6">
+          <div class="col-span-6 md:col-span-3">
+            <div class="caption-uppercase mb-3" style="color: var(--color-muted);">The Stack</div>
+            <p class="body-sm">A Claude Code workstation, installed by hand. Maintained quarterly.</p>
+          </div>
+          <div class="col-span-6 md:col-span-3">
+            <div class="caption-uppercase mb-3" style="color: var(--color-muted);">Operator</div>
+            <p class="body-sm" style="color: var(--color-ink);">Reggie</p>
+          </div>
+          <div class="col-span-6 md:col-span-3">
+            <div class="caption-uppercase mb-3" style="color: var(--color-muted);">Set in</div>
+            <p class="body-sm"><a href="https://fonts.google.com/specimen/Onest" class="link">Onest</a></p>
+            <p class="caption mt-1" style="color: var(--color-muted);">Variable geometric grotesque</p>
+          </div>
+          <div class="col-span-6 md:col-span-3">
+            <div class="caption-uppercase mb-3" style="color: var(--color-muted);">Design</div>
+            <p class="caption">Built on the <a href="https://github.com/voltagent/awesome-design-md" class="link">Ferrari DESIGN.md</a>.</p>
+          </div>
+        </div>
+        <div class="hairline mt-10"></div>
+        <div class="flex flex-wrap items-baseline justify-between mt-4 gap-3">
+          <div class="caption">Rev {REV_DATE} · Document STK-001</div>
+          <div class="caption">All credentials local · OAuth · Revoke anytime</div>
+        </div>
+      </footer>
+
+    </div>
+  </body>
+</html>
