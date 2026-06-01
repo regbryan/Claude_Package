@@ -88,6 +88,7 @@ Live two-way links between Claude and your tools. Sign in once per connector and
 - **nanobanana**: AI image generation and editing (Gemini 3 Flash Image / Pro Image)
 - **Higgsfield**: AI video generation (Kling, Sora 2, Veo, Wan, Seedance, Minimax, etc.)
 - **Adobe Creative Suite**: Photoshop / Premiere / Lightroom workflows (batch edit, retouch, resize, social variations, quick cuts)
+- **CapCut**: desktop editor for long-form/podcast cutting (first + second cut, then combine intro + episode + outro into the final)
 
 **Marketing & content**
 - **Selr / Marketing Studio**: AI video clipping, virality prediction, character consistency, content workflows
@@ -367,6 +368,7 @@ A handful of command-line tools get installed on your machine to support the wor
 - **osv-scanner** (Google): dependency vulnerability scanning
 - **syft**: software bill of materials generation
 - **semgrep**: static analysis security scanner
+- **ffmpeg**: media conversion, trimming, concatenation, audio extraction (the local engine behind video and podcast edits)
 
 For new web projects, the default dev-dependency stack is also seeded automatically:
 - **Biome** (linting + formatting)
@@ -476,6 +478,11 @@ Three things to try first:
 **Hermes maintenance**
 - Update: `hermes update`
 - Health check: `hermes doctor`
+
+**Windows environment notes** (verified on the 2026-06-01 rebuild)
+- Verified versions: Node 24.16, Remotion 4.0.462, ffmpeg 8.1.1 (winget `Gyan.FFmpeg`), CapCut 8.7, gh 2.93.
+- After a fresh Windows reinstall, `node` / `npm` / `gh` / `ffmpeg` are often not on the shell PATH yet. Call them by full path (`C:\Program Files\nodejs\`, `C:\Program Files\GitHub CLI\gh.exe`) or restart the shell after installing.
+- Some npm postinstall scripts (e.g. `chromedriver`) shell out to `node`. Prepend `C:\Program Files\nodejs` to `PATH` before `npm install`, or they fail with `'node' is not recognized`.
 
 **Privacy & control**
 - All credentials live on your machine, not mine.
