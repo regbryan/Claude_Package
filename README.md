@@ -6,6 +6,28 @@ This guide explains **what's in the setup, what it does for you, and how to inst
 
 ---
 
+## Quick install (Windows)
+
+The `package/` folder in this repo holds the real files: 21 skills, 185 specialist agents, the `/app-review` command, the rules file, and the plugin list. `install.ps1` puts them in place.
+
+1. Install Claude and sign in.
+2. Download this repo (green **Code** button, then **Download ZIP**, and unzip it) or clone it with git.
+3. Open PowerShell in that folder and run:
+
+   ```
+   powershell -ExecutionPolicy Bypass -File .\install.ps1 -Projects "Client A","Client B"
+   ```
+
+   `-Projects` creates one folder per project under Documents; leave it off to skip that. Add `-Timer` to install the work timer.
+4. Close Claude completely and open it again. Say yes if it asks to trust or install the plugin marketplaces.
+5. Sign in to each connector you use. Sign-ins cannot be copied from another PC.
+
+The script never deletes anything. Skills, agents and a `CLAUDE.md` that already exist are left alone (pass `-Force` to replace skills, agents and commands), and `settings.json` is backed up before it is changed. Running it twice is safe.
+
+The longer guide below describes the full setup, including optional pieces that are not in `package/`.
+
+---
+
 ## 1. What you're getting
 
 Out of the box, Claude Code is a smart assistant in a terminal. What I add on top is the difference between "smart assistant" and "operator who can actually do the work."

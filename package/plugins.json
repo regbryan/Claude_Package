@@ -1,0 +1,33 @@
+{
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "supabase@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "firecrawl@claude-plugins-official": true,
+    "data@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "atomic-agents@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "claude-mem@thedotmack": true,
+    "claude-ads@ai-marketing-hub-claude-ads": true,
+    "impeccable@impeccable": true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "visual-critique@designer-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": { "source": { "source": "github", "repo": "anthropics/claude-plugins-official" } },
+    "thedotmack": { "source": { "source": "github", "repo": "thedotmack/claude-mem" } },
+    "ai-marketing-hub-claude-ads": { "source": { "source": "github", "repo": "AgriciDaniel/claude-ads" } },
+    "impeccable": { "source": { "source": "github", "repo": "pbakaus/impeccable" } },
+    "ui-ux-pro-max-skill": { "source": { "source": "github", "repo": "nextlevelbuilder/ui-ux-pro-max-skill" } },
+    "designer-skills": { "source": { "source": "github", "repo": "Owl-Listener/designer-skills" } }
+  }
+}
