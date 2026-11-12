@@ -1,12 +1,16 @@
-# install.ps1 - installs this Claude Code setup on a Windows PC.
+# install.ps1 - installs this Claude setup on a Windows PC.
 #
 # Run from the folder you cloned or unzipped:
-#     powershell -ExecutionPolicy Bypass -File .\install.ps1
+#     powershell -ExecutionPolicy Bypass -File .\install.ps1 -Profile marketing
+#
+# Profiles (see package\profiles):
+#   marketing   marketing, social media and brand work; no developer tooling
+#   full        everything in the package (default)
 #
 # What it does:
-#   1. Copies skills, agents and the /app-review command into ~/.claude
-#   2. Installs the rules file (CLAUDE.md) if you don't already have one
-#   3. Turns on the plugins and their marketplaces in ~/.claude/settings.json
+#   1. Copies the profile's skills, agents and commands into ~/.claude
+#   2. Installs the profile's rules file (CLAUDE.md) if you don't already have one
+#   3. Turns on the profile's plugins and marketplaces in ~/.claude/settings.json
 #   4. Optionally creates one folder per project under Documents
 #   5. Optionally installs the work timer
 #
@@ -14,6 +18,7 @@
 # you pass -Force, and settings.json is backed up before it is changed.
 #
 # Options:
+#   -Profile <name>                   which profile to install (default: full)
 #   -Projects "Client A","Client B"   create these project folders
 #   -ProjectsRoot <path>              where to create them (default: Documents)
 #   -Timer                            install the work timer hook
@@ -21,6 +26,7 @@
 #   -ClaudeHome <path>                install somewhere other than ~/.claude (for testing)
 
 param(
+    [string]$Profile = 'full',
     [string[]]$Projects = @(),
     [string]$ProjectsRoot = [Environment]::GetFolderPath('MyDocuments'),
     [switch]$Timer,
@@ -32,6 +38,13 @@ $ErrorActionPreference = 'Stop'
 $Pkg = Join-Path $PSScriptRoot 'package'
 if (-not (Test-Path $Pkg)) { throw "Cannot find the 'package' folder next to install.ps1." }
 
+$profilePath = Join-Path $Pkg "profiles\$Profile.json"
+if (-not (Test-Path $profilePath)) {
+    $names = (Get-ChildItem (Join-Path $Pkg 'profiles') -Filter '*.json' | ForEach-Object { $_.BaseName }) -join ', '
+    throw "There is no profile called '$Profile'. Available: $names"
+}
+$prof = Get-Content $profilePath -Raw | ConvertFrom-Json
+
 function Say([string]$msg) { Write-Host $msg }
 function Write-Utf8([string]$path, [string]$text) {
     [IO.File]::WriteAllText($path, $text, (New-Object Text.UTF8Encoding($false)))
@@ -40,32 +53,53 @@ function Set-Prop($obj, [string]$name, $value) {
     if ($obj.PSObject.Properties[$name]) { $obj.$name = $value }
     else { $obj | Add-Member -NotePropertyName $name -NotePropertyValue $value }
 }
+# A profile entry is "*" (everything) or a list of names.
+function Is-All($v) { return ($v -is [string]) -and ($v -eq '*') }
 
 New-Item -ItemType Directory -Force $ClaudeHome | Out-Null
+Say "Profile:   $Profile - $($prof.description)"
 Say "Installing into $ClaudeHome"
 Say ''
 
 # --- 1. Skills (one folder each) -------------------------------------------
-$skillsDst = Join-Path $ClaudeHome 'skills'
-New-Item -ItemType Directory -Force $skillsDst | Out-Null
+$skillDirs = @(Get-ChildItem (Join-Path $Pkg 'skills') -Directory)
+if (-not (Is-All $prof.skills)) { $skillDirs = @($skillDirs | Where-Object { @($prof.skills) -contains $_.Name }) }
 $added = 0; $kept = 0
-foreach ($s in Get-ChildItem (Join-Path $Pkg 'skills') -Directory) {
-    $dst = Join-Path $skillsDst $s.Name
-    if (Test-Path $dst) {
-        if (-not $Force) { $kept++; continue }
-        Remove-Item -Recurse -Force $dst -Confirm:$false
+if ($skillDirs.Count -gt 0) {
+    $skillsDst = Join-Path $ClaudeHome 'skills'
+    New-Item -ItemType Directory -Force $skillsDst | Out-Null
+    foreach ($s in $skillDirs) {
+        $dst = Join-Path $skillsDst $s.Name
+        if (Test-Path $dst) {
+            if (-not $Force) { $kept++; continue }
+            Remove-Item -Recurse -Force $dst -Confirm:$false
+        }
+        Copy-Item -Recurse $s.FullName $dst
+        $added++
     }
-    Copy-Item -Recurse $s.FullName $dst
-    $added++
 }
 Say "Skills:    $added installed, $kept already there (left alone)"
 
 # --- 2. Agents and commands (file by file) ---------------------------------
-function Copy-Tree([string]$name) {
+# $want is "*" or a list of sub-folders / files inside the tree.
+function Copy-Tree([string]$name, $want, $exclude) {
     $src = Join-Path $Pkg $name
     $dstRoot = Join-Path $ClaudeHome $name
+    $files = @()
+    if (Is-All $want) { $files = @(Get-ChildItem $src -Recurse -File) }
+    else {
+        foreach ($w in @($want)) {
+            $p = Join-Path $src $w
+            if (-not (Test-Path $p)) { Say "           (not in package, skipped: $name\$w)"; continue }
+            if ((Get-Item $p).PSIsContainer) { $files += @(Get-ChildItem $p -Recurse -File) }
+            else { $files += Get-Item $p }
+        }
+    }
     $a = 0; $k = 0
-    foreach ($f in Get-ChildItem $src -Recurse -File) {
+    foreach ($f in $files) {
+        $skip = $false
+        foreach ($x in @($exclude)) { if ($x -and $f.Name -like "*$x*") { $skip = $true } }
+        if ($skip) { continue }
         $rel = $f.FullName.Substring($src.Length).TrimStart('\')
         $dst = Join-Path $dstRoot $rel
         if ((Test-Path $dst) -and -not $Force) { $k++; continue }
@@ -75,18 +109,21 @@ function Copy-Tree([string]$name) {
     }
     return @($a, $k)
 }
-$r = Copy-Tree 'agents';   Say "Agents:    $($r[0]) installed, $($r[1]) already there (left alone)"
-$r = Copy-Tree 'commands'; Say "Commands:  $($r[0]) installed, $($r[1]) already there (left alone)"
+$r = Copy-Tree 'agents' $prof.agents $prof.excludeAgents
+Say "Agents:    $($r[0]) installed, $($r[1]) already there (left alone)"
+$r = Copy-Tree 'commands' $prof.commands @()
+Say "Commands:  $($r[0]) installed, $($r[1]) already there (left alone)"
 
 # --- 3. Rules file ----------------------------------------------------------
+$rulesSrc = Join-Path $Pkg $prof.rules
 $rulesDst = Join-Path $ClaudeHome 'CLAUDE.md'
 if (Test-Path $rulesDst) {
     $alt = Join-Path $ClaudeHome 'CLAUDE.from-package.md'
-    Copy-Item (Join-Path $Pkg 'CLAUDE.md') $alt -Force
+    Copy-Item $rulesSrc $alt -Force
     Say "Rules:     you already have a CLAUDE.md, so it was left alone."
     Say "           The packaged one is saved beside it as CLAUDE.from-package.md."
 } else {
-    Copy-Item (Join-Path $Pkg 'CLAUDE.md') $rulesDst
+    Copy-Item $rulesSrc $rulesDst
     Say "Rules:     CLAUDE.md installed"
 }
 
@@ -100,7 +137,7 @@ if (Test-Path $settingsPath) {
     Copy-Item $settingsPath $backup
     Say "Settings:  existing settings.json backed up to $(Split-Path $backup -Leaf)"
 }
-$want = Get-Content (Join-Path $Pkg 'plugins.json') -Raw | ConvertFrom-Json
+$want = Get-Content (Join-Path $Pkg $prof.plugins) -Raw | ConvertFrom-Json
 $pluginsAdded = 0
 foreach ($section in 'enabledPlugins', 'extraKnownMarketplaces') {
     if (-not $settings.PSObject.Properties[$section]) { Set-Prop $settings $section (New-Object PSObject) }
@@ -112,7 +149,7 @@ foreach ($section in 'enabledPlugins', 'extraKnownMarketplaces') {
         }
     }
 }
-Say "Plugins:   $pluginsAdded turned on ($(@($want.enabledPlugins.PSObject.Properties).Count) in the package)"
+Say "Plugins:   $pluginsAdded turned on ($(@($want.enabledPlugins.PSObject.Properties).Count) in this profile)"
 
 # --- 5. Work timer (optional) -----------------------------------------------
 if ($Timer) {
@@ -150,4 +187,9 @@ Say ''
 Say 'Done. Next:'
 Say '  1. Close Claude completely and open it again.'
 Say '  2. If it asks whether to trust or install the plugin marketplaces, say yes.'
-Say '  3. Sign in to each connector you use (Google, HubSpot and so on). Those cannot be copied.'
+Say '  3. Sign in to each connector you use (Google, Canva, HubSpot and so on). Those cannot be copied.'
+$appPlugins = @($prof.appPlugins)
+if ($appPlugins.Count -gt 0) {
+    Say "  4. In the Claude app's plugin list, add these by hand: $($appPlugins -join ', ')."
+    Say '     They come from your Claude account, so this script cannot add them.'
+}

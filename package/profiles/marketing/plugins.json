@@ -1,0 +1,14 @@
+{
+  "enabledPlugins": {
+    "canva@claude-plugins-official": true,
+    "adobe-for-creativity@claude-plugins-official": true,
+    "postiz@claude-plugins-official": true,
+    "claude-ads@ai-marketing-hub-claude-ads": true,
+    "visual-critique@designer-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": { "source": { "source": "github", "repo": "anthropics/claude-plugins-official" } },
+    "ai-marketing-hub-claude-ads": { "source": { "source": "github", "repo": "AgriciDaniel/claude-ads" } },
+    "designer-skills": { "source": { "source": "github", "repo": "Owl-Listener/designer-skills" } }
+  }
+}

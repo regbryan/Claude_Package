@@ -1,0 +1,22 @@
+{
+  "description": "Marketing, social media and brand work. No developer tooling.",
+  "skills": [],
+  "agents": [
+    "marketing",
+    "paid-media",
+    "design/design-brand-guardian.md",
+    "design/design-visual-storyteller.md",
+    "design/design-image-prompt-engineer.md",
+    "design/design-inclusive-visuals-specialist.md",
+    "design/design-whimsy-injector.md"
+  ],
+  "excludeAgents": [
+    "baidu", "bilibili", "china-ecommerce", "cross-border", "douyin", "kuaishou",
+    "livestream-commerce", "private-domain", "wechat", "weibo", "xiaohongshu", "zhihu",
+    "app-store-optimizer"
+  ],
+  "commands": [],
+  "rules": "profiles/marketing/CLAUDE.md",
+  "plugins": "profiles/marketing/plugins.json",
+  "appPlugins": ["marketing", "brand-voice", "small-business", "design"]
+}

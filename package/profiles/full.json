@@ -1,0 +1,10 @@
+{
+  "description": "Everything in the package (developer and marketing).",
+  "skills": "*",
+  "agents": "*",
+  "excludeAgents": [],
+  "commands": "*",
+  "rules": "CLAUDE.md",
+  "plugins": "plugins.json",
+  "appPlugins": []
+}

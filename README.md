@@ -8,21 +8,29 @@ This guide explains **what's in the setup, what it does for you, and how to inst
 
 ## Quick install (Windows)
 
-The `package/` folder in this repo holds the real files: 21 skills, 185 specialist agents, the `/app-review` command, the rules file, and the plugin list. `install.ps1` puts them in place.
+The `package/` folder in this repo holds the real files, and `install.ps1` puts them in place. Pick a profile:
+
+| Profile | For | Installs |
+|---|---|---|
+| `marketing` | Marketing, social media and brand work | 26 agents (social, content, SEO, paid media, brand), 5 plugins (Canva, Adobe, Postiz, claude-ads, visual-critique), marketing rules file |
+| `full` (default) | Developers | 21 skills, 185 agents, `/app-review`, 21 plugins, developer rules file |
 
 1. Install Claude and sign in.
 2. Download this repo (green **Code** button, then **Download ZIP**, and unzip it) or clone it with git.
 3. Open PowerShell in that folder and run:
 
    ```
-   powershell -ExecutionPolicy Bypass -File .\install.ps1 -Projects "Client A","Client B"
+   powershell -ExecutionPolicy Bypass -File .\install.ps1 -Profile marketing -Projects "Client A","Client B"
    ```
 
    `-Projects` creates one folder per project under Documents; leave it off to skip that. Add `-Timer` to install the work timer.
 4. Close Claude completely and open it again. Say yes if it asks to trust or install the plugin marketplaces.
 5. Sign in to each connector you use. Sign-ins cannot be copied from another PC.
+6. Marketing profile only: in the Claude app's plugin list, add **marketing**, **brand-voice**, **small-business** and **design** by hand. They come from the Claude account, so the script cannot add them.
 
 The script never deletes anything. Skills, agents and a `CLAUDE.md` that already exist are left alone (pass `-Force` to replace skills, agents and commands), and `settings.json` is backed up before it is changed. Running it twice is safe.
+
+To change what a profile installs, edit its file in `package/profiles/`.
 
 The longer guide below describes the full setup, including optional pieces that are not in `package/`.
 
